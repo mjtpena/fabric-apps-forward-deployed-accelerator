@@ -1,0 +1,21 @@
+name: Fabric App feature
+description: A specification-backed application change
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: textarea
+    id: value
+    attributes:
+      label: Customer/user value
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: Specification and acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Fabric Apps constraints and capability dependencies

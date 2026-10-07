@@ -1,0 +1,51 @@
+name: Deploy production
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Allow an approved destructive schema change
+        required: false
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: fabric-app-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: fabric-production
+    env:
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      FABRIC_WORKSPACE_NAME: ${{ vars.FABRIC_WORKSPACE_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test --if-present
+      - name: Require recovery plan for force
+        if: ${{ inputs.force == true }}
+        run: test -f evidence/release/schema-recovery-plan.md
+      - name: Login
+        run: npx rayfin login --service-principal -t "$TENANT_ID" -u "$CLIENT_ID" -p "$CLIENT_SECRET"
+      - name: Dry run
+        run: npx rayfin up --workspace "$FABRIC_WORKSPACE_NAME" --dry-run --verbose | tee production-dry-run.txt
+      - name: Deploy safely
+        if: ${{ inputs.force != true }}
+        run: npx rayfin up --workspace "$FABRIC_WORKSPACE_NAME" --yes
+      - name: Deploy approved destructive change
+        if: ${{ inputs.force == true }}
+        run: npx rayfin up --workspace "$FABRIC_WORKSPACE_NAME" --yes --force
+      - uses: actions/upload-artifact@v4
+        with:
+          name: production-deployment-evidence
+          path: production-dry-run.txt

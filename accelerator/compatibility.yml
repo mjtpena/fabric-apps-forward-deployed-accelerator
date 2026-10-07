@@ -1,0 +1,39 @@
+schemaVersion: 1
+lastReviewed: 2026-10-07
+platform:
+  fabricApps:
+    lifecycle: preview
+  rayfin:
+    testedVersion: REVIEW_AND_PIN_BEFORE_USE
+    nodeVersion: "20"
+capabilities:
+  managedData:
+    status: baseline
+  fabricSso:
+    status: baseline
+  staticHosting:
+    status: baseline
+  connectors:
+    status: validated-preview
+    requiresTenantProbe: true
+  functions:
+    status: experimental
+    requiresTenantProbe: true
+  storage:
+    status: experimental
+    requiresTenantProbe: true
+constraints:
+  primaryKey:
+    type: uuid
+    conventionalField: id
+  compositePrimaryKeys: false
+  manyToMany:
+    direct: false
+    workaround: explicit-join-entity
+  rawSqlThroughGeneratedApi: false
+  customProductionIdentityProviders: false
+policy:
+  forbidUnpinnedRayfinDependencies: true
+  forbidExperimentalWithoutProbe: true
+  requireDryRunForProduction: true
+  requireApprovalForForce: true

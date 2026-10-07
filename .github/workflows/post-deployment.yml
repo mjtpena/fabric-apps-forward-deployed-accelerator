@@ -1,0 +1,19 @@
+name: Post-deployment smoke test
+on:
+  workflow_dispatch:
+    inputs:
+      appUrl:
+        description: Deployed application URL
+        required: true
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: APP_URL='${{ inputs.appUrl }}' npm run test:smoke --if-present

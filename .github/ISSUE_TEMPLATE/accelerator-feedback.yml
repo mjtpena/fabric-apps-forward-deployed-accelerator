@@ -1,0 +1,19 @@
+name: Accelerator field feedback
+description: Capture reusable learning from an engagement
+title: "[Field feedback]: "
+labels: ["field-feedback"]
+body:
+  - type: textarea
+    id: pattern
+    attributes:
+      label: Repeated pattern or platform gap
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed accelerator change

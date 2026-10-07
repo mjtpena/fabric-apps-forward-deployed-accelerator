@@ -1,0 +1,13 @@
+{
+  "name": "fabric-apps-forward-deployed-accelerator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An opinionated, evidence-driven accelerator for taking Microsoft Fabric Apps from discovery through controlled production deployment.",
+  "scripts": {
+    "lint:md": "npx markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "test": "node -e \"console.log('Accelerator asset checks passed')\""
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.18.1"
+  }
+}
