@@ -1,0 +1,4 @@
+* @repository-owner
+/.github/workflows/ @repository-owner
+/accelerator/ @repository-owner
+/templates/architecture/ @repository-owner

@@ -1,0 +1,24 @@
+name: Validate
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run lint:md
+      - run: npm test --if-present
+      - name: Reject committed secrets and local Rayfin environment
+        run: |
+          test ! -f rayfin/.env
+          ! git grep -nE '(CLIENT_SECRET|BEGIN PRIVATE KEY|VITE_.*TOKEN)=' -- ':!*.example'
